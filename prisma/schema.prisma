@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model clients {
+  id        String     @id @default(uuid())
+  name      String
+  phone     String
+  cpf       String
+  birth_date DateTime
+  current_invoice_price Float
+  created_at DateTime @default(now())
+
+  // 1:N - One client has many invoices
+  invoices  invoices[]
+}
+
+model months {
+  id    String   @id @default(uuid())
+  month DateTime @default(now())
+
+  // 1:N - One month has many invoices
+  invoices invoices[]
+}
+
+model invoices {
+  id      String   @id @default(uuid())
+  status  String
+  value   Float
+  client_id String
+  month_id  String
+
+  client clients @relation(fields: [client_id], references: [id])
+  month months @relation(fields: [month_id], references: [id])
+}
