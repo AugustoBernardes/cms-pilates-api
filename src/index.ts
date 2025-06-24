@@ -1,5 +1,4 @@
-const test = () => {
-    console.log("New Date:", new Date());
-}
 
-test()
+function test(){
+    console.log("test")
+}

@@ -12,6 +12,7 @@ services:
       - .:/app
     depends_on:
       - postgres
+    command: sh -c "npm run prisma:generate && npm run prisma:migrate && npm run start"
 
   postgres:
     image: postgres:16

@@ -6,9 +6,11 @@
     "build": "tsc",
     "start": "npm run build && node dist/index.js",
     "dev": "tsc --watch",
-    "prisma:migrate": "npx prisma migrate dev",
-    "prisma:generate": "npx prisma generate"
+    "prisma:migrate": "npx prisma migrate deploy",
+    "prisma:generate": "npx prisma generate",
+    "docker-compose:down": "docker-compose down && docker-compose down --volumes"
   },
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
