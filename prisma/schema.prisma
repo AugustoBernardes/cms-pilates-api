@@ -23,7 +23,7 @@ model clients {
 
 model months {
   id    String   @id @default(uuid())
-  month DateTime @default(now())
+  month String
 
   // 1:N - One month has many invoices
   invoices invoices[]
