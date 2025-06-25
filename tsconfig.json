@@ -1,11 +1,20 @@
 {
-  "compilerOptions": {
-    "target": "es2020",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "strict": true
-  },
-  "include": ["src"]
+    "compilerOptions": {
+        "outDir": "./dist",
+        "module": "commonjs",
+        "target": "ES2019",
+        "esModuleInterop": true,
+        "allowJs": true,
+        "strictNullChecks": true,
+        "sourceMap": true,
+        "rootDir": "src",
+        "baseUrl": "src",
+        "paths": {
+            "@/*":["*"]
+        }
+    },
+    "include": [
+        "src"
+    ],
+    "exclude": []
 }

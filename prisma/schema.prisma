@@ -12,7 +12,7 @@ model clients {
   id        String     @id @default(uuid())
   name      String
   phone     String
-  cpf       String
+  cpf      String?
   birth_date DateTime
   current_invoice_price Float
   created_at DateTime @default(now())
