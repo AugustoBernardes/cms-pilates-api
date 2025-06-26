@@ -1,13 +1,9 @@
 import express from 'express'
-import { ClientsRepository } from './infra/repositories/clients-repository'
+import clientRoute from './presentation/routes/clients-route'
 
 const app = express()
 
-app.get('/', async (req, res) => {
-    const repository = new ClientsRepository()
-    const response = await repository.findById('1')
-  res.send(response)
-})
+app.get('/clients', clientRoute)
 
 const port = process.env.PORT || 3000
 app.listen(port, () => {

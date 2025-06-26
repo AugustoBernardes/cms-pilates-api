@@ -5,6 +5,9 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient()
 
 export class ClientsRepository implements IClientsRepository {
+  async findAll() : Promise<Client[]> {
+    return await prisma.clients.findMany();
+  }
   async findById(id: string) : Promise<Client | null> {
     return await prisma.clients.findUnique({
       where: { id },

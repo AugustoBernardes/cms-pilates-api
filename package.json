@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc",
     "start": "npm run build && node dist/index.js",
-    "dev": "concurrently \"tsc --watch\" \"nodemon dist/index.js\"",
+    "dev": "concurrently \"npm run build --watch\" \"nodemon dist/index.js\"",
     "prisma:migrate": "npx prisma migrate deploy",
     "prisma:generate": "npx prisma generate",
     "docker-compose:down": "docker-compose down && docker-compose down --volumes",
