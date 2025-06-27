@@ -1,21 +1,27 @@
 import IClientsRepository from "@/interfaces/repositories/clients-repository";
 import { Request, Response } from "express";
-import { ok } from "../helpers/response-helper";
+import { badRequest, ok } from "../helpers/response-helper";
+import { searchSchema } from "../validators";
 
 export class ClientsController {
- constructor(
+  constructor(
     private readonly clientsRepository: IClientsRepository
- ) {}
-  async handler(req: Request, res: Response) {
-    const { search } = req.query;
+  ) {}
 
-    if (search) {
-      const clients = await this.clientsRepository.findByName(search as string);
+  async getAll(req: Request, res: Response) {
+    try {
+      const parsed = searchSchema.safeParse(req.query);
+
+      if (parsed.success && parsed.data.search) {
+        const clients = await this.clientsRepository.findByName(parsed.data.search);
+        return ok(res, clients, 'Clients found');
+      }
+
+      const clients = await this.clientsRepository.findAll();
       return ok(res, clients, 'Clients found');
+
+    } catch (error: any) {
+      return badRequest(res, error.message, error);
     }
-
-    const clients = await this.clientsRepository.findAll();
-
-    return ok(res, clients, 'Clients found');
   }
 }

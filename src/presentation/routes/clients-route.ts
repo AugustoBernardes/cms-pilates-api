@@ -7,7 +7,7 @@ const clientsRepository = new ClientsRepository();
 
 const clientsController = new ClientsController(clientsRepository);
 
-router.get('/clients', clientsController.handler.bind(clientsController));
+router.get('/', clientsController.getAll.bind(clientsController));
 
 
 export default router;

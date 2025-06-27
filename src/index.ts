@@ -1,9 +1,9 @@
 import express from 'express'
-import clientRoute from './presentation/routes/clients-route'
+import clientsRoute from './presentation/routes/clients-route'
 
 const app = express()
 
-app.get('/clients', clientRoute)
+app.use('/clients', clientsRoute)
 
 const port = process.env.PORT || 3000
 app.listen(port, () => {
