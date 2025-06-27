@@ -35,6 +35,7 @@ model invoices {
   value   Float
   client_id String
   month_id  String
+  created_at DateTime @default(now())
 
   client clients @relation(fields: [client_id], references: [id])
   month months @relation(fields: [month_id], references: [id])
