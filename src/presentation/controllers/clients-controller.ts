@@ -15,9 +15,14 @@ export class ClientsController {
   async getAll(req: Request, res: Response) {
     try {
       const parsed = searchSchema.safeParse(req.query);
+      const { page, page_size } = req.query;
 
       if (parsed.success && parsed.data.search) {
-        const clients = await this.clientsRepository.findByName(parsed.data.search);
+        const clients = await this.clientsRepository.findByName({
+          name: parsed.data.search,
+          page: Number(page),
+          page_size: Number(page_size),
+        });
         return ok(res, clients, 'Clients found');
       }
 

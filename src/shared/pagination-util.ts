@@ -1,15 +1,14 @@
-export const paginationUtil = ({page = 1, page_size = 10}) => {
-    const parsedPage = Number(page);
-    const parsedPageSize = Number(page_size);
+export const paginationUtil = ({page, page_size}) => {
+    const parsedPage = Number(page) || 1;
+    const parsedPageSize = Number(page_size) || 10;
 
-    if (isNaN(parsedPage) || parsedPage < 1) {
-        throw new Error('Invalid page number');
-    }
+
     const skip = (parsedPage - 1) * parsedPageSize;
 
     return {        
         skip,
         take: parsedPageSize,
         page: parsedPage,
+        page_size: parsedPageSize
     };
 }

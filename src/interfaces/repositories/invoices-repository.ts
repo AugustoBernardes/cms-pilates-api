@@ -1,3 +1,4 @@
+import { PaginatedResponse } from "../../shared";
 import { Invoice } from "../entities";
 import { Pagination } from "../shared/pagination";
 
@@ -7,6 +8,6 @@ export type FindClienstInvoicesParams = Pagination & {
 };
 
 export default interface IInvoicesRepository {
-  findClientsInvoices(data: FindClienstInvoicesParams): Promise<Invoice[] | null>;
+  findClientsInvoices(data: FindClienstInvoicesParams): Promise<PaginatedResponse<Invoice> | null>;
   update(id: string, data: Pick<Invoice, 'status' | 'value'>): Promise<Invoice>;
 }
