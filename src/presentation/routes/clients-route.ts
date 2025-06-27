@@ -10,6 +10,7 @@ const invoicesRepository = new InvoicesRepository()
 const clientsController = new ClientsController(clientsRepository,invoicesRepository);
 
 router.get('/', clientsController.getAll.bind(clientsController));
+router.post('/', clientsController.create.bind(clientsController));
 router.get('/:id/invoices', clientsController.getInvoices.bind(clientsController));
 
 

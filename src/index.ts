@@ -2,6 +2,7 @@ import express from 'express'
 import clientsRoute from './presentation/routes/clients-route'
 
 const app = express()
+app.use(express.json());
 
 app.use('/clients', clientsRoute)
 

@@ -25,7 +25,7 @@ export class ClientsRepository implements IClientsRepository {
     });
   }
 
-  async create(data: Omit<Client, 'id' | 'created_at'>) {
+  async create(data: Omit<Client,'created_at'>) {
     return await prisma.clients.create({
       data,
     });

@@ -16,7 +16,7 @@ export function created(res: Response, data, message = 'Created') {
   });
 }
 
-export function badRequest(res: Response, message = 'Bad Request', details = null) {
+export function badRequest(res: Response, message = 'Bad Request', details: object | null = null) {
   return res.status(400).json({
     status: 'fail',
     message,
