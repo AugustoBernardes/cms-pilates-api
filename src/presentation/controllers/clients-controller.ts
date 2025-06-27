@@ -46,8 +46,7 @@ export class ClientsController {
 
   async create(req: Request, res: Response) {
     try {
-      const body = req.body;
-      const parsed = clientSchema.safeParse(body);
+      const parsed = clientSchema.safeParse(req.body);
 
       if (!parsed.success) {
         return badRequest(res, undefined, parsed.error);
@@ -64,6 +63,29 @@ export class ClientsController {
 
     } catch (error: any) {
       console.error('Error creating client:', error);
+      return badRequest(res, error.message, error);
+    }
+  }
+
+    async update(req: Request, res: Response) {
+    try {
+      const clientId = req.params.id;
+      const parsed = clientSchema.safeParse(req.body);
+
+      if (!parsed.success) {
+        return badRequest(res, undefined, parsed.error);
+      }
+
+      const clientData = {
+        ...parsed.data,
+        birth_date: new Date(parsed.data.birth_date),
+      };
+
+      const client = await this.clientsRepository.update(clientId, clientData);
+      return ok(res, client, 'Client updated successfully');
+
+    } catch (error: any) {
+      console.error('Error updating client:', error);
       return badRequest(res, error.message, error);
     }
   }
