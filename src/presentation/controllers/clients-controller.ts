@@ -67,7 +67,7 @@ export class ClientsController {
     }
   }
 
-    async update(req: Request, res: Response) {
+  async update(req: Request, res: Response) {
     try {
       const clientId = req.params.id;
       const parsed = clientSchema.safeParse(req.body);
@@ -86,6 +86,22 @@ export class ClientsController {
 
     } catch (error: any) {
       console.error('Error updating client:', error);
+      return badRequest(res, error.message, error);
+    }
+  }
+
+  async delete(req: Request, res: Response) {
+    try {
+      const clientId = req.params.id;
+      if (!clientId) {
+        return badRequest(res, 'Client ID is required');
+      }
+
+      const client = await this.clientsRepository.delete(clientId);
+      return ok(res, client, 'Client deleted successfully');
+
+    } catch (error: any) {
+      console.error('Error deleting client:', error);
       return badRequest(res, error.message, error);
     }
   }
