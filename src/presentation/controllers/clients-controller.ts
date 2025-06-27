@@ -31,12 +31,17 @@ export class ClientsController {
 
   async getInvoices(req: Request, res: Response) {
     try {
-      const clientId = req.params.id;
-      if (!clientId) {
+      const client_id = req.params.id;
+      const { page, page_size } = req.query;
+      if (!client_id) {
         return badRequest(res, 'Client ID is required');
       }
 
-      const invoices = await this.invoicesRepository.findClientsInvoices(clientId);
+      const invoices = await this.invoicesRepository.findClientsInvoices({
+        client_id: client_id,
+        page: Number(page),
+        page_size: Number(page_size),
+      });
       return ok(res, invoices, 'Invoices found for client');
 
     } catch (error: any) {
@@ -69,7 +74,7 @@ export class ClientsController {
 
   async update(req: Request, res: Response) {
     try {
-      const clientId = req.params.id;
+      const client_id = req.params.id;
       const parsed = clientSchema.safeParse(req.body);
 
       if (!parsed.success) {
@@ -81,7 +86,7 @@ export class ClientsController {
         birth_date: new Date(parsed.data.birth_date),
       };
 
-      const client = await this.clientsRepository.update(clientId, clientData);
+      const client = await this.clientsRepository.update(client_id, clientData);
       return ok(res, client, 'Client updated successfully');
 
     } catch (error: any) {
@@ -92,12 +97,12 @@ export class ClientsController {
 
   async delete(req: Request, res: Response) {
     try {
-      const clientId = req.params.id;
-      if (!clientId) {
+      const client_id = req.params.id;
+      if (!client_id) {
         return badRequest(res, 'Client ID is required');
       }
 
-      const client = await this.clientsRepository.delete(clientId);
+      const client = await this.clientsRepository.delete(client_id);
       return ok(res, client, 'Client deleted successfully');
 
     } catch (error: any) {
