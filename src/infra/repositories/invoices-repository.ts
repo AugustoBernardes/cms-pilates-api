@@ -74,6 +74,9 @@ export class InvoicesRepository implements IInvoicesRepository {
             orderBy: {
             created_at: 'desc',
           },
+        include: {
+          client: true,
+        },
         skip,
         take
       })
