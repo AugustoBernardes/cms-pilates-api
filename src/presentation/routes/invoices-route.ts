@@ -1,6 +1,6 @@
 import express from 'express';
 import { InvoicesRepository } from '../../infra/repositories/invoices-repository';
-import { InvoicesController } from '../controllers/invoices-controller';
+import { InvoicesController } from '../controllers';
 const router = express.Router();
 
 const invoicesRepository = new InvoicesRepository()

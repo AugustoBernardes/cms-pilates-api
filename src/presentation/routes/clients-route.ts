@@ -1,6 +1,6 @@
 import express from 'express';
 import { ClientsRepository } from '../../infra/repositories/clients-repository';
-import { ClientsController } from '../controllers/clients-controller';
+import { ClientsController } from '../controllers';
 import { InvoicesRepository } from '../../infra/repositories/invoices-repository';
 const router = express.Router();
 
