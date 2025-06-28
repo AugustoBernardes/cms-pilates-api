@@ -61,4 +61,15 @@ export class ClientsRepository implements IClientsRepository {
       where: { id },
     });
   }
+
+  async findAnniversaryClients(): Promise<Client[] | null> {
+    const month = new Date().getMonth() + 1
+    
+    const users = await prisma.$queryRawUnsafe(`
+      SELECT * FROM "clients"
+      WHERE EXTRACT(MONTH FROM "birth_date") = $1
+    `, month) as Client[];
+
+    return users.length > 0 ? users : null;
+  }
 }

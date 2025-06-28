@@ -2,11 +2,13 @@ import IMonthsRepository from "@/interfaces/repositories/months-repository";
 import { badRequest, ok } from "../helpers/response-helper";
 import { Request, Response } from "express";
 import IInvoicesRepository from "@/interfaces/repositories/invoices-repository";
+import IClientsRepository from "@/interfaces/repositories/clients-repository";
 
 export class MonthsController {
   constructor(
     private readonly monthsRepository: IMonthsRepository ,
-    private readonly invoicesRepository: IInvoicesRepository 
+    private readonly invoicesRepository: IInvoicesRepository,
+    private readonly clientsRepository: IClientsRepository
   ) {}
 
   async getAll(req: Request, res: Response) {
@@ -33,5 +35,15 @@ export class MonthsController {
     } catch (error: any) {
       return badRequest(res, error.message, error);
     }
+  }
+
+  async getClientsAnniversary(req: Request, res: Response) {
+    try {
+
+      const clients = await this.clientsRepository.findAnniversaryClients();
+      return ok(res, clients, 'Clients anniversary found');
+    } catch (error: any) {
+      return badRequest(res, error.message, error);
+    } 
   }
 }
