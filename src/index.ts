@@ -7,6 +7,7 @@ app.use(express.json());
 app.use('/clients', routes.clientsRoute.default)
 app.use('/invoices', routes.invoicesRoute.default)
 app.use('/months', routes.monthsRoute.default)
+app.use('/users', routes.usersRoute.default)
 
 const port = process.env.PORT || 3000
 app.listen(port, () => {
