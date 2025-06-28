@@ -1,5 +1,5 @@
-import { Client, Invoice } from "@/interfaces/entities";
-import IInvoicesRepository, { FindClienstInvoicesParams } from "@/interfaces/repositories/invoices-repository";
+import { Invoice } from "@/interfaces/entities";
+import IInvoicesRepository, { FindClienstInvoicesParams, FindMonthInvoicesParams } from "@/interfaces/repositories/invoices-repository";
 import { PaginatedResponse, paginatedResponseUtil, paginationUtil } from "../../shared";
 import { PrismaClient } from "@prisma/client";
 import { Pagination } from "@/interfaces/shared/pagination";
@@ -59,6 +59,26 @@ export class InvoicesRepository implements IInvoicesRepository {
         take
       })
     ])
+    return paginatedResponseUtil<Invoice>({data:invoices, total, page, page_size});
+  }
+
+  async findMonthInvoices({month_id, ...data}: FindMonthInvoicesParams): Promise<PaginatedResponse<Invoice> | null> {
+    const { skip, take, page, page_size } = paginationUtil({page: data.page, page_size: data.page_size});
+
+    const [total, invoices] = await Promise.all([ 
+      prisma.invoices.count({
+          where: { month_id },
+        }),
+      prisma.invoices.findMany({
+        where: { month_id },
+            orderBy: {
+            created_at: 'desc',
+          },
+        skip,
+        take
+      })
+    ])
+
     return paginatedResponseUtil<Invoice>({data:invoices, total, page, page_size});
   }
 }

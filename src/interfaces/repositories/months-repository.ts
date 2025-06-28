@@ -1,5 +1,5 @@
 import { Month } from "../entities";
 
 export default interface IMonthsRepository {
-  getAll(): Promise<Month[] | null>;
+  findAll(): Promise<Month[] | null>;
 }   

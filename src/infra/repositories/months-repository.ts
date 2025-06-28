@@ -5,7 +5,7 @@ import IMonthsRepository from "@/interfaces/repositories/months-repository";
 const prisma = new PrismaClient()
 
 export class MonthsRepository implements IMonthsRepository {
-  getAll(): Promise<Month[] | null> {
+  findAll(): Promise<Month[] | null> {
     return prisma.months.findMany({
       orderBy: {
         month: 'desc',

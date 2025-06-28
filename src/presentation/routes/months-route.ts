@@ -5,9 +5,11 @@ import { MonthsController } from '../controllers/months-controller';
 const router = express.Router();
 
 const monthsRepository = new MonthsRepository();
+const invoicesRepository = new InvoicesRepository();
 
-const clientsController = new MonthsController(monthsRepository);
+const monthsController = new MonthsController(monthsRepository,invoicesRepository);
 
-router.get('/', clientsController.getAll.bind(clientsController));
+router.get('/', monthsController.getAll.bind(monthsController));
+router.get('/:id/invoices', monthsController.getInvoices.bind(monthsController));
 
 export default router;

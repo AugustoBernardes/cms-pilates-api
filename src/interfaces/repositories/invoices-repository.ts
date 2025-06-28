@@ -1,5 +1,5 @@
 import { PaginatedResponse } from "../../shared";
-import { Invoice } from "../entities";
+import { Invoice, Month } from "../entities";
 import { Pagination } from "../shared/pagination";
 
 
@@ -7,8 +7,13 @@ export type FindClienstInvoicesParams = Pagination & {
   client_id: string;
 };
 
+export type FindMonthInvoicesParams = Pagination &{
+  month_id: string;
+};
+
 export default interface IInvoicesRepository {
   findClientsInvoices(data: FindClienstInvoicesParams): Promise<PaginatedResponse<Invoice> | null>;
   update(id: string, data: Pick<Invoice, 'status'>): Promise<Invoice>;
   findPendingInvoices(data: Pagination & {search?: string}): Promise<PaginatedResponse<Invoice> | null>;
+  findMonthInvoices(data: FindMonthInvoicesParams): Promise<PaginatedResponse<Invoice> | null>;
 }
