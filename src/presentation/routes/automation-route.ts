@@ -12,5 +12,6 @@ const clientsRepository = new ClientsRepository();
 const monthsController = new AutomationsController(clientsRepository,invoicesRepository,monthsRepository);
 
 router.post('/create-invoices', monthsController.createInvoice.bind(monthsController));
+router.get('/automation-token', monthsController.newToken.bind(monthsController));
 
 export { router as automationRoute };

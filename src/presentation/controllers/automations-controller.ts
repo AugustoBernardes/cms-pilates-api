@@ -5,6 +5,7 @@ import IInvoicesRepository from "@/interfaces/repositories/invoices-repository";
 import { v4 as uuidv4 } from 'uuid';
 import IMonthsRepository from "@/interfaces/repositories/months-repository";
 import { Client, Invoice } from "@/interfaces/entities";
+import Authenticator from "../../infra/authentication/authenticator";
 
 export class AutomationsController {
   constructor(
@@ -61,6 +62,18 @@ export class AutomationsController {
       return badRequest(res, error.message, error);
     }
   }
+
+  async newToken(req: Request, res: Response) {
+
+    const token = await new Authenticator().generateToken({
+            payload: { type: 'automation' },
+          })
+
+          return ok(res, { token }, 'Token generated successfully');
+  }
+    
+  
+    
 }
 
 function buildOpenInvoices(clients: Client[], month_id: string): Omit<Invoice, 'created_at'>[] {
