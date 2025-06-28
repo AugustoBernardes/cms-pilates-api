@@ -32,7 +32,6 @@ export class AutomationsController {
       });
 
       const firstPage = await this.clientsRepository.findAll({ page: 1, page_size: 100 });
-      console.log('First page of clients:', firstPage);
       if (!firstPage || firstPage.data.length === 0) {
         return ok(res, [], 'No clients found');
       }
@@ -61,19 +60,7 @@ export class AutomationsController {
     } catch (error: any) {
       return badRequest(res, error.message, error);
     }
-  }
-
-  async newToken(req: Request, res: Response) {
-
-    const token = await new Authenticator().generateToken({
-            payload: { type: 'automation' },
-          })
-
-          return ok(res, { token }, 'Token generated successfully');
-  }
-    
-  
-    
+  } 
 }
 
 function buildOpenInvoices(clients: Client[], month_id: string): Omit<Invoice, 'created_at'>[] {
