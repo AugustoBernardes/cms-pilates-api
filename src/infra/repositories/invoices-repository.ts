@@ -3,6 +3,7 @@ import IInvoicesRepository, { FindClienstInvoicesParams, FindMonthInvoicesParams
 import { PaginatedResponse, paginatedResponseUtil, paginationUtil } from "../../shared";
 import { PrismaClient } from "@prisma/client";
 import { Pagination } from "@/interfaces/shared/pagination";
+import { v4 } from "uuid";
 
 const prisma = new PrismaClient()
 
@@ -83,5 +84,11 @@ export class InvoicesRepository implements IInvoicesRepository {
     ])
 
     return paginatedResponseUtil<Invoice>({data:invoices, total, page, page_size});
+  }
+
+  async createMany(data: Omit<Invoice[], 'client' | 'created_at'>): Promise<any> {
+    return await prisma.invoices.createMany({
+      data,
+    })
   }
 }

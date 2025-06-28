@@ -6,5 +6,6 @@ export interface Invoice {
     value: number;
     client_id: string;
     month_id: string;
+    created_at?: Date;
     client?: Client
 }

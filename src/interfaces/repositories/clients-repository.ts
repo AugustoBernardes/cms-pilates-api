@@ -16,7 +16,7 @@ export type FindByNameResponse = {
 export default interface IClientsRepository {
   findById(id: string): Promise<Client | null>;
   findByName(data: FindByName): Promise<PaginatedResponse<Client> | null>;
-  findAll(): Promise<Client[] | null>;
+  findAll(data?: Pagination): Promise<PaginatedResponse<Client> | null>;
   findAnniversaryClients(): Promise<Client[] | null>;
   create(data: Omit<Client, 'id' | 'created_at'>): Promise<Client>;
   update(id: string, data: Omit<Client, 'id' | 'created_at'>): Promise<Client>;

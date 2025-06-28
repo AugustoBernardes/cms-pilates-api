@@ -26,7 +26,10 @@ export class ClientsController {
         return ok(res, clients, 'Clients found');
       }
 
-      const clients = await this.clientsRepository.findAll();
+      const clients = await this.clientsRepository.findAll({
+        page: Number(page),
+        page_size: Number(page_size)
+      });
       return ok(res, clients, 'Clients found');
 
     } catch (error: any) {

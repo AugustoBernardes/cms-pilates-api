@@ -2,12 +2,22 @@ import { Client } from "@/interfaces/entities";
 import IClientsRepository, { FindByName } from "@/interfaces/repositories/clients-repository";
 import { PaginatedResponse, paginatedResponseUtil, paginationUtil } from "../../shared";
 import { PrismaClient } from "@prisma/client";
+import { Pagination } from "@/interfaces/shared/pagination";
 
 const prisma = new PrismaClient()
 
 export class ClientsRepository implements IClientsRepository {
-  async findAll() : Promise<Client[]> {
-    return await prisma.clients.findMany();
+  async findAll(data: Pagination) : Promise<PaginatedResponse<Client>> {
+    const { skip, take, page, page_size } = paginationUtil({page: data.page, page_size: data.page_size});
+    const [total, clients] = await Promise.all([
+      prisma.clients.count(),
+      prisma.clients.findMany({
+        skip,
+        take,
+      }),
+    ]);
+
+    return paginatedResponseUtil<Client>({data:clients, total, page, page_size});
   }
 
   async findById(id: string) : Promise<Client | null> {

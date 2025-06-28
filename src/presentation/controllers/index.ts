@@ -1,2 +1,5 @@
 export * from './clients-controller'
 export * from './invoices-controller'
+export * from './months-controller'
+export * from './users-controller'
+export * from './automations-controller'

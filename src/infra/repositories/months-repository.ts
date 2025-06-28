@@ -5,12 +5,29 @@ import IMonthsRepository from "@/interfaces/repositories/months-repository";
 const prisma = new PrismaClient()
 
 export class MonthsRepository implements IMonthsRepository {
-  findAll(): Promise<Month[] | null> {
+  async findAll(): Promise<Month[] | null> {
     return prisma.months.findMany({
       orderBy: {
         month: 'desc',
       },
       take: 12,
+    });
+  }
+
+  async findByValue(month: string): Promise<Month | null> {
+    return prisma.months.findFirst({
+      where: {
+        month: month,
+      },
+    });
+  }
+
+  async create(month: Month): Promise<Month> {
+    return prisma.months.create({
+      data: {
+        id: month.id,
+        month: month.month,
+      },
     });
   }
 }

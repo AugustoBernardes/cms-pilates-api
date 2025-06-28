@@ -9,6 +9,7 @@ app.use('/clients',usersMiddleware, routes.clientsRoute)
 app.use('/invoices', usersMiddleware , routes.invoicesRoute)
 app.use('/months', usersMiddleware, routes.monthsRoute)
 app.use('/users', routes.usersRoute)
+app.use('/automations', routes.automationRoute)
 
 const port = process.env.PORT || 3000
 app.listen(port, () => {

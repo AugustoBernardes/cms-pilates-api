@@ -16,4 +16,5 @@ export default interface IInvoicesRepository {
   update(id: string, data: Pick<Invoice, 'status'>): Promise<Invoice>;
   findPendingInvoices(data: Pagination & {search?: string}): Promise<PaginatedResponse<Invoice> | null>;
   findMonthInvoices(data: FindMonthInvoicesParams): Promise<PaginatedResponse<Invoice> | null>;
+  createMany(data: Omit<Invoice[], 'client' | 'created_at'>): Promise<any>;
 }

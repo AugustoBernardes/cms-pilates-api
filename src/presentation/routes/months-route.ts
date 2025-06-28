@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { ClientsRepository, InvoicesRepository, MonthsRepository } from '../../infra/repositories';
-import { MonthsController } from '../controllers/months-controller';
+import { MonthsController } from '../controllers';
 const router = express.Router();
 
 const monthsRepository = new MonthsRepository();
