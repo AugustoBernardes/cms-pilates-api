@@ -38,6 +38,7 @@ export class ClientsController {
     try {
       const client_id = req.params.id;
       const { page, page_size } = req.query;
+      
       if (!client_id) {
         return badRequest(res, 'Client ID is required');
       }
