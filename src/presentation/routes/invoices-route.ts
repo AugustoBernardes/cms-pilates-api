@@ -1,0 +1,11 @@
+import express from 'express';
+import { InvoicesRepository } from '../../infra/repositories/invoices-repository';
+import { InvoicesController } from '../controllers/invoices-controller';
+const router = express.Router();
+
+const invoicesRepository = new InvoicesRepository()
+const invoicesController = new InvoicesController(invoicesRepository);
+
+router.put('/:id', invoicesController.update.bind(invoicesController));
+
+export default router;

@@ -27,7 +27,7 @@ export class InvoicesRepository implements IInvoicesRepository {
     return paginatedResponseUtil<Invoice>({data:invoices, total, page, page_size});
   }
 
-  async update(id: string, data: Pick<Invoice, 'status' | 'value'>): Promise<Invoice> {
+  async update(id: string, data: Pick<Invoice, 'status'>): Promise<Invoice> {
     return await prisma.invoices.update({
       where: { id },
       data,

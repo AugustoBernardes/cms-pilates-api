@@ -9,5 +9,5 @@ export type FindClienstInvoicesParams = Pagination & {
 
 export default interface IInvoicesRepository {
   findClientsInvoices(data: FindClienstInvoicesParams): Promise<PaginatedResponse<Invoice> | null>;
-  update(id: string, data: Pick<Invoice, 'status' | 'value'>): Promise<Invoice>;
+  update(id: string, data: Pick<Invoice, 'status'>): Promise<Invoice>;
 }
