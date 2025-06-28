@@ -1,5 +1,5 @@
 import express from 'express';
-import { InvoicesRepository } from '../../infra/repositories/invoices-repository';
+import { InvoicesRepository } from '../../infra/repositories';
 import { InvoicesController } from '../controllers';
 const router = express.Router();
 
