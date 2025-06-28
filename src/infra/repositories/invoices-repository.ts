@@ -33,4 +33,32 @@ export class InvoicesRepository implements IInvoicesRepository {
       data,
     });
   }
+
+  async findPendingInvoices({search, ...data}: Pagination & {search?: string}): Promise<PaginatedResponse<Invoice> | null> {
+    const { skip, take, page, page_size } = paginationUtil({page: data.page, page_size: data.page_size});
+
+    const [total,invoices] = await Promise.all([
+      prisma.invoices.count({
+        where: {
+          status: 'open',
+          ...(search && { client: { name: { contains: search, mode: 'insensitive'} } }),
+        },
+      }),
+      prisma.invoices.findMany({
+        where: {
+          status: 'open',
+          ...(search && { client: { name: { contains: search,  mode: 'insensitive' } } }),
+        },
+        include: {
+          client: true,
+        },
+        orderBy: {
+          created_at: 'desc',
+        },
+        skip,
+        take
+      })
+    ])
+    return paginatedResponseUtil<Invoice>({data:invoices, total, page, page_size});
+  }
 }

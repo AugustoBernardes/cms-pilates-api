@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { badRequest, ok } from "../helpers/response-helper";
-import { updateInvoiceSchema } from "../validators";
+import { searchSchema, updateInvoiceSchema } from "../validators";
 import IInvoicesRepository from "@/interfaces/repositories/invoices-repository";
 
 export class InvoicesController {
@@ -24,4 +24,30 @@ export class InvoicesController {
       return badRequest(res, error.message, error);
     }
   }
+
+  async findPendingInvoices(req: Request, res: Response) {
+    try {
+      const parsed = searchSchema.safeParse(req.query);
+      const { page, page_size } = req.query;
+      
+      if (parsed.success) {
+        const invoices = await this.invoicesRepository.findPendingInvoices({
+          search: parsed.data.search,
+          page: Number(page),
+          page_size: Number(page_size),
+        });
+
+        return ok(res, invoices, 'Pending invoices retrieved successfully');
+      }
+
+      const invoices = await this.invoicesRepository.findPendingInvoices({
+        page: Number(page),
+        page_size: Number(page_size),
+      });
+
+      return ok(res, invoices, 'Invoices retrieved successfully');
+    } catch (error: any) {
+      return badRequest(res, error.message, error);
+    }  
+  } 
 }
