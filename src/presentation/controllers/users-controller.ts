@@ -21,7 +21,7 @@ export class UsersController {
       if (username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) {
 
         const token = await this.authenticator.generateToken({
-          payload: { username },
+          payload: { username, type: 'login' },
           options: { expiresIn: '1d' }
         });
         return ok(res, { token }, 'User logged in');

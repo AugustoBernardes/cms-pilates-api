@@ -14,4 +14,4 @@ router.get('/', monthsController.getAll.bind(monthsController));
 router.get('/:id/invoices', monthsController.getInvoices.bind(monthsController));
 router.get('/clients-anniversary', monthsController.getClientsAnniversary.bind(monthsController));
 
-export default router;
+export { router as monthsRoute }

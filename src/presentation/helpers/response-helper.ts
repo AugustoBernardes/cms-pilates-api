@@ -30,3 +30,10 @@ export function internalError(res: Response, message = 'Internal Server Error') 
     message,
   });
 }
+
+export function unauthorized(res: Response, message = 'Unauthorized') {
+  return res.status(401).json({
+    status: 'fail',
+    message,
+  });
+}

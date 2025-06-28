@@ -10,4 +10,4 @@ const usersController = new UsersController(authenticator);
 
 router.post('/login', usersController.login.bind(usersController));
 
-export default router;
+export { router as usersRoute }
