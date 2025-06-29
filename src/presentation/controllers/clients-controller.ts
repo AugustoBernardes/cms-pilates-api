@@ -12,6 +12,22 @@ export class ClientsController {
     private readonly invoicesRepository: IInvoicesRepository
   ) {}
 
+  async findById(req: Request, res: Response) {
+    try {
+      const client_id = req.params.id;
+
+      if (!client_id) {
+        return badRequest(res, 'Client ID is required');
+      }
+
+      const client = await this.clientsRepository.findById(client_id);
+      return ok(res, client, 'Client found');
+    } catch (error: any) {
+      console.error('Error finding client', error);
+      return badRequest(res, error.message, error);
+    }
+  }
+
   async getAll(req: Request, res: Response) {
     try {
       const parsed = searchSchema.safeParse(req.query);
