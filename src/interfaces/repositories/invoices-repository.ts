@@ -1,5 +1,5 @@
 import { PaginatedResponse } from "../../shared";
-import { Invoice, Month } from "../entities";
+import { Invoice } from "../entities";
 import { Pagination } from "../shared/pagination";
 
 
