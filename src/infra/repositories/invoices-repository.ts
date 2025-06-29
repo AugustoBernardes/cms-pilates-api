@@ -20,6 +20,9 @@ export class InvoicesRepository implements IInvoicesRepository {
         orderBy: {
           created_at: 'desc',
         },
+        include: {
+          month: true
+        },
         skip,
         take
       })
@@ -52,6 +55,7 @@ export class InvoicesRepository implements IInvoicesRepository {
         },
         include: {
           client: true,
+          month: true
         },
         orderBy: {
           created_at: 'desc',
@@ -77,6 +81,7 @@ export class InvoicesRepository implements IInvoicesRepository {
           },
         include: {
           client: true,
+          month: true
         },
         skip,
         take
