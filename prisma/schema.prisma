@@ -16,6 +16,7 @@ model clients {
   birth_date DateTime
   current_invoice_price Float
   created_at DateTime @default(now())
+  deleted_at        DateTime?
 
   // 1:N - One client has many invoices
   invoices  invoices[]

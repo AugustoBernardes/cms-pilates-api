@@ -10,8 +10,15 @@ export class ClientsRepository implements IClientsRepository {
   async findAll(data: Pagination) : Promise<PaginatedResponse<Client>> {
     const { skip, take, page, page_size } = paginationUtil({page: data.page, page_size: data.page_size});
     const [total, clients] = await Promise.all([
-      prisma.clients.count(),
+      prisma.clients.count({
+        where: {
+          deleted_at: null,
+        },
+      }),
       prisma.clients.findMany({
+        where: {
+          deleted_at: null,
+        },
         skip,
         take,
       }),
@@ -32,6 +39,7 @@ export class ClientsRepository implements IClientsRepository {
     const [total, clients] = await Promise.all([
       prisma.clients.count({
         where: {
+          deleted_at: null,
           name: {
             contains: data.name,
             mode: 'insensitive',
@@ -40,10 +48,11 @@ export class ClientsRepository implements IClientsRepository {
       }),
       prisma.clients.findMany({
         where: {    
-            name: {
-              contains: data.name,
-              mode: 'insensitive',
-            } 
+          deleted_at: null,
+          name: {
+            contains: data.name,
+            mode: 'insensitive',
+          } 
         },
         skip,
         take,
@@ -67,8 +76,9 @@ export class ClientsRepository implements IClientsRepository {
   }
 
   async delete(id: string) {
-    return await prisma.clients.delete({
+    return await prisma.clients.update({
       where: { id },
+      data: { deleted_at: new Date() },
     });
   }
 
@@ -78,6 +88,8 @@ export class ClientsRepository implements IClientsRepository {
     const users = await prisma.$queryRawUnsafe(`
       SELECT * FROM "clients"
       WHERE EXTRACT(MONTH FROM "birth_date") = $1
+      AND "deleted_at" IS NULL
+      ORDER BY "birth_date" ASC
     `, month) as Client[];
 
     return users.length > 0 ? users : null;
