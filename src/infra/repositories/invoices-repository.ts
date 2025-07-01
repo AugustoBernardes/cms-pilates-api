@@ -1,5 +1,5 @@
 import { Invoice } from "@/interfaces/entities";
-import IInvoicesRepository, { FindClienstInvoicesParams, FindMonthInvoicesParams } from "@/interfaces/repositories/invoices-repository";
+import IInvoicesRepository, { FindClienstInvoicesParams, FindMonthInvoicesParams, MonthResume } from "@/interfaces/repositories/invoices-repository";
 import { PaginatedResponse, paginatedResponseUtil, paginationUtil } from "../../shared";
 import { PrismaClient } from "@prisma/client";
 import { Pagination } from "@/interfaces/shared/pagination";
@@ -89,6 +89,39 @@ export class InvoicesRepository implements IInvoicesRepository {
     ])
 
     return paginatedResponseUtil<Invoice>({data:invoices, total, page, page_size});
+  }
+
+  async monthResume(month_id: string) : Promise<MonthResume> {
+
+    const [openInvoicesAmount, paidInvoicesAmount] = await Promise.all([
+      prisma.invoices.aggregate({
+        _sum: {
+          value: true,
+        },
+        where: {
+          month_id,
+          status: 'open',
+        },
+      }),
+      prisma.invoices.aggregate({
+        _sum: {
+          value: true,
+        },
+        where: {
+          month_id,
+          status: 'paid',
+        },
+      }),
+    ]);
+
+    const total_open = openInvoicesAmount._sum.value ?? 0;
+    const total_paid = paidInvoicesAmount._sum.value ?? 0;
+
+    return {
+      total_open,
+      total_paid,
+      total: total_open + total_paid,
+    }
   }
 
   async createMany(data: Omit<Invoice[], 'client' | 'created_at'>): Promise<any> {
