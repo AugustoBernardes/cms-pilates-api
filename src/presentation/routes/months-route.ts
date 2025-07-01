@@ -12,6 +12,7 @@ const monthsController = new MonthsController(monthsRepository,invoicesRepositor
 
 router.get('/', monthsController.getAll.bind(monthsController));
 router.get('/:id/invoices', monthsController.getInvoices.bind(monthsController));
+router.get('/:id/resume', monthsController.getMonthResume.bind(monthsController));
 router.get('/clients-anniversary', monthsController.getClientsAnniversary.bind(monthsController));
 
 export { router as monthsRoute }

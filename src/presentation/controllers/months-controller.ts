@@ -46,4 +46,19 @@ export class MonthsController {
       return badRequest(res, error.message, error);
     } 
   }
+
+  async getMonthResume(req: Request, res: Response) {
+    try {
+      const monthId = req.params.id;
+
+      if (!monthId) {
+        return badRequest(res, 'Month ID is required');
+      }
+
+      const resume = await this.invoicesRepository.monthResume(monthId);
+      return ok(res, resume, 'Month resume found');
+    } catch (error: any) {
+      return badRequest(res, error.message, error);
+    }
+  }
 }
