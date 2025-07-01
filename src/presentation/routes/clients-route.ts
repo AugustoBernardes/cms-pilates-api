@@ -1,13 +1,14 @@
 import express from 'express';
 import { ClientsRepository } from '../../infra/repositories/clients-repository';
 import { ClientsController } from '../controllers';
-import { InvoicesRepository } from '../../infra/repositories';
+import { InvoicesRepository, MonthsRepository } from '../../infra/repositories';
 const router = express.Router();
 
 const clientsRepository = new ClientsRepository();
 const invoicesRepository = new InvoicesRepository()
+const monthsRepository = new MonthsRepository();
 
-const clientsController = new ClientsController(clientsRepository,invoicesRepository);
+const clientsController = new ClientsController(clientsRepository,invoicesRepository,monthsRepository);
 
 router.get('/' ,clientsController.getAll.bind(clientsController));
 router.post('/', clientsController.create.bind(clientsController));

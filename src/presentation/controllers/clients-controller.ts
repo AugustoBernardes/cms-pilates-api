@@ -5,11 +5,14 @@ import { searchSchema } from "../validators";
 import IInvoicesRepository from "@/interfaces/repositories/invoices-repository";
 import { clientSchema } from "../validators/user-clients-schema";
 import { v4 as uuidv4 } from 'uuid';
+import { currentDateStringUtil } from "../../shared";
+import IMonthsRepository from "@/interfaces/repositories/months-repository";
 
 export class ClientsController {
   constructor(
     private readonly clientsRepository: IClientsRepository,
-    private readonly invoicesRepository: IInvoicesRepository
+    private readonly invoicesRepository: IInvoicesRepository,
+    private readonly monthRepository: IMonthsRepository
   ) {}
 
   async findById(req: Request, res: Response) {
@@ -74,27 +77,53 @@ export class ClientsController {
     }
   }
 
-  async create(req: Request, res: Response) {
-    try {
-      const parsed = clientSchema.safeParse(req.body);
-
-      if (!parsed.success) {
-        return badRequest(res, undefined, parsed.error);
-      }
-
-      const clientData = {
-        id: uuidv4(),
-        ...parsed.data,
-        birth_date: new Date(parsed.data.birth_date),
-      };
-
-      const client = await this.clientsRepository.create(clientData);
-      return ok(res, client, 'Client created successfully');
-
-    } catch (error: any) {
-      console.error('Error creating client:', error);
-      return badRequest(res, error.message, error);
+async create(req: Request, res: Response) {
+  try {
+    const parsed = clientSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return badRequest(res, undefined, parsed.error);
     }
+
+    const clientId = uuidv4();
+    const monthDate = currentDateStringUtil();
+
+    const month = await this.findOrCreateMonth(monthDate);
+
+    const firstInvoice = {
+      id: uuidv4(),
+      status: 'open',
+      value: parsed.data.current_invoice_price,
+      client_id: clientId,
+      month_id: month.id,
+    };
+
+    const clientData = {
+      id: clientId,
+      ...parsed.data,
+      birth_date: new Date(parsed.data.birth_date),
+    };
+
+    const client = await this.clientsRepository.create(clientData);
+    await this.invoicesRepository.create(firstInvoice);
+
+    return ok(res, client, 'Client created successfully');
+  } catch (error: any) {
+    console.error('Error creating client:', error);
+    return badRequest(res, error.message, error);
+  }
+}
+
+  private async findOrCreateMonth(monthDate: string) {
+    const existingMonth = await this.monthRepository.findByValue(monthDate);
+
+    if (existingMonth) {
+      return existingMonth;
+    }
+
+    return this.monthRepository.create({
+      id: uuidv4(),
+      month: monthDate,
+    });
   }
 
   async update(req: Request, res: Response) {

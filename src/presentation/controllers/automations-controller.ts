@@ -5,7 +5,7 @@ import IInvoicesRepository from "@/interfaces/repositories/invoices-repository";
 import { v4 as uuidv4 } from 'uuid';
 import IMonthsRepository from "@/interfaces/repositories/months-repository";
 import { Client, Invoice } from "@/interfaces/entities";
-import Authenticator from "../../infra/authentication/authenticator";
+import { currentDateStringUtil } from "../../shared";
 
 export class AutomationsController {
   constructor(
@@ -16,10 +16,7 @@ export class AutomationsController {
 
   async createInvoice(req: Request, res: Response) {
     try {
-      const now = new Date();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const year = now.getFullYear();
-      const monthDate = `${year}-${month}`;
+      const monthDate = currentDateStringUtil();
 
       const existingMonth = await this.monthRepository.findByValue(monthDate);
       if (existingMonth) {

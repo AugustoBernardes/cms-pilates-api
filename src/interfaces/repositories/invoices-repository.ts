@@ -24,4 +24,5 @@ export default interface IInvoicesRepository {
   findMonthInvoices(data: FindMonthInvoicesParams): Promise<PaginatedResponse<Invoice> | null>;
   createMany(data: Omit<Invoice[], 'client' | 'created_at'>): Promise<any>;
   monthResume(month_id: string) : Promise<MonthResume>
+  create(data: Omit<Invoice, 'created_at' | 'client' | 'month'>): Promise<Invoice>
 }
