@@ -7,6 +7,7 @@
     "build": "tsc",
     "build:watch": "tsc --watch",
     "start": "npm run build && node dist/index.js",
+    "prisma:db:push": "npx prisma db push",
     "dev": "concurrently \"npm run build:watch\" \"nodemon dist/index.js\"",
     "prisma:migrate:dev": "npx prisma migrate dev",
     "prisma:migrate": "npx prisma migrate deploy",

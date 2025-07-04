@@ -131,8 +131,6 @@ export class InvoicesRepository implements IInvoicesRepository {
   }
 
   async create(data: Omit<Invoice, 'created_at' | 'client' | 'month'>): Promise<Invoice> {
-
-    console.log({data});
     return await prisma.invoices.create({
       data,
     });
