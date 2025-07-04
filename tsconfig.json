@@ -12,7 +12,7 @@
         "paths": {
             "@/*":["*"]
         },
-        "types": ["jest", "node"]
+        "types": ["jest"]
     },
     "include": [
         "src"
