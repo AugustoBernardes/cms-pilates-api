@@ -15,7 +15,11 @@ jobs:
         with:
           url: ${{ secrets.AUTOMATION_URL }}
           method: 'POST'
-          headers: '{"Content-Type":"application/json", "Authorization":"Bearer ${{ secrets.AUTOMATION_TOKEN }}"}'
+          customHeaders: |
+            [
+              { "name": "Content-Type", "value": "application/json" },
+              { "name": "Authorization", "value": "Bearer ${{ secrets.AUTOMATION_TOKEN }}" }
+            ]
 
-      - name: Print response formatted
-        run: echo "${{ steps.post.outputs.response }}" | jq .
+      - name: Print response
+        run: echo 'Response: ${{ steps.post.outputs.response }}'
