@@ -6,6 +6,7 @@
     "test": "npx jest",
     "build": "tsc",
     "build:watch": "tsc --watch",
+     "heroku-postbuild": "npm install --include=dev && npm run build",
     "start": "npm run build && node dist/index.js",
     "prisma:db:push": "npx prisma db push",
     "dev": "concurrently \"npm run build:watch\" \"nodemon dist/index.js\"",
