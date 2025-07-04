@@ -10,8 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send POST request
+        id: post
         uses: fjogeleit/http-request-action@v1.15.1
         with:
           url: ${{ secrets.AUTOMATION_URL }}
           method: 'POST'
           headers: '{"Content-Type":"application/json", "Authorization":"Bearer ${{ secrets.AUTOMATION_TOKEN }}"}'
+
+      - name: Print response
+        run: echo "Response: ${{ steps.post.outputs.response }}"
