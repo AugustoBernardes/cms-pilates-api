@@ -21,6 +21,9 @@ export class ClientsRepository implements IClientsRepository {
         },
         skip,
         take,
+        orderBy: {
+          created_at: 'desc',
+        },
       }),
     ]);
 

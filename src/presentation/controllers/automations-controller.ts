@@ -13,43 +13,34 @@ export class AutomationsController {
     private readonly invoicesRepository: IInvoicesRepository,
     private readonly monthRepository: IMonthsRepository
   ) {}
-
+  
   async createInvoice(req: Request, res: Response) {
     try {
       const monthDate = currentDateStringUtil();
+      const month = await this.findOrCreateMonth(monthDate);
 
-      const existingMonth = await this.monthRepository.findByValue(monthDate);
-      if (existingMonth) {
-        return badRequest(res, 'Month already exists', { month: existingMonth });
-      }
+      const invoicesToCreate: Omit<Invoice, 'created_at'>[] = [];
 
-      const newMonth = await this.monthRepository.create({
-        id: uuidv4(),
-        month: monthDate,
-      });
+      let currentPage = 1;
+      let totalPages = 1;
 
-      const firstPage = await this.clientsRepository.findAll({ page: 1, page_size: 100 });
-      if (!firstPage || firstPage.data.length === 0) {
-        return ok(res, [], 'No clients found');
-      }
-
-      let invoicesToCreate: Omit<Invoice, 'created_at'>[] = [];
-      invoicesToCreate.push(...buildOpenInvoices(firstPage.data, newMonth.id));
-
-      const totalPages = firstPage.total_pages ?? 1;
-
-      for (let currentPage = 2; currentPage <= totalPages; currentPage++) {
-        const nextPage = await this.clientsRepository.findAll({
+      do {
+        const pageResult = await this.clientsRepository.findAll({
           page: currentPage,
           page_size: 100,
         });
 
-        if (!nextPage?.data || nextPage.data.length === 0) {
+        if (!pageResult?.data || pageResult.data.length === 0) {
+          if (currentPage === 1) {
+            return ok(res, [], 'No clients found');
+          }
           break;
         }
 
-        invoicesToCreate.push(...buildOpenInvoices(nextPage.data, newMonth.id));
-      }
+        invoicesToCreate.push(...buildOpenInvoices(pageResult.data, month.id));
+        totalPages = pageResult.total_pages ?? 1;
+        currentPage++;
+      } while (currentPage <= totalPages);
 
       await this.invoicesRepository.createMany(invoicesToCreate);
 
@@ -57,7 +48,17 @@ export class AutomationsController {
     } catch (error: any) {
       return badRequest(res, error.message, error);
     }
-  } 
+  }
+
+  private async findOrCreateMonth(monthDate: string) {
+    return (
+      (await this.monthRepository.findByValue(monthDate)) ??
+      this.monthRepository.create({
+        id: uuidv4(),
+        month: monthDate,
+      })
+    );
+  }
 }
 
 function buildOpenInvoices(clients: Client[], month_id: string): Omit<Invoice, 'created_at'>[] {
