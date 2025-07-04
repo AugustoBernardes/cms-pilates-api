@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Send POST request with curl
         env:
-          AUTOMATION_URL: ${{ secrets.AUTOMATION_URL }}
+          AUTOMATION_URL: http://localhost:3000/automations/create-invoices
           AUTOMATION_TOKEN: ${{ secrets.AUTOMATION_TOKEN }}
         run: |
           response=$(curl -s -X POST "$AUTOMATION_URL" \
