@@ -21,4 +21,5 @@ export default interface IClientsRepository {
   create(data: Omit<Client, 'id' | 'created_at'>): Promise<Client>;
   update(id: string, data: Omit<Client, 'id' | 'created_at'>): Promise<Client>;
   delete(id: string): Promise<Client>;
+  clientWithoutMonthInvoice(data: Pagination & { month_id: string }): Promise<PaginatedResponse<Client> | null>
 }   

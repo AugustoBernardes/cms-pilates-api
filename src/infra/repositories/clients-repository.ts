@@ -97,4 +97,47 @@ export class ClientsRepository implements IClientsRepository {
 
     return users.length > 0 ? users : null;
   }
+
+  async clientWithoutMonthInvoice(
+    data: Pagination & { month_id: string }
+  ): Promise<PaginatedResponse<Client> | null> {
+    const { skip, take, page, page_size } = paginationUtil({
+      page: data.page,
+      page_size: data.page_size,
+    });
+
+    const [clients, countResult] = await Promise.all([
+      prisma.$queryRaw<Client[]>`
+        SELECT * FROM "clients" c
+        WHERE NOT EXISTS (
+          SELECT 1 FROM "invoices" i
+          WHERE i."client_id" = c.id
+            AND i."month_id" = ${data.month_id}
+        )
+        AND c."deleted_at" IS NULL
+        ORDER BY c."name" ASC
+        OFFSET ${skip}
+        LIMIT ${take}
+      `,
+      prisma.$queryRaw<{ count: number }[]>`
+        SELECT COUNT(*)::int AS count FROM "clients" c
+        WHERE NOT EXISTS (
+          SELECT 1 FROM "invoices" i
+          WHERE i."client_id" = c.id
+            AND i."month_id" = ${data.month_id}
+        )
+        AND c."deleted_at" IS NULL
+      `,
+    ]);
+
+    const total = countResult?.[0]?.count ?? 0;
+
+    return paginatedResponseUtil<Client>({
+      data: clients,
+      total,
+      page,
+      page_size,
+    });
+  }
+
 }

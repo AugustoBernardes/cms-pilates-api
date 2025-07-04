@@ -20,8 +20,8 @@ async function seed() {
 
   await prisma.invoices.createMany({
     data: [
-      { id: '1',status: 'paid', month_id: '1', client_id: '1', value: 80 },
-      { id: '2',status: 'paid', month_id: '2', client_id: '1', value: 90 },
+      { id: '1',status: 'open', month_id: '1', client_id: '1', value: 80 },
+      { id: '2',status: 'open', month_id: '2', client_id: '1', value: 90 },
       { id: '3',status: 'paid', month_id: '3', client_id: '1', value: 100.2 },
       { id: '4', status: 'paid', month_id: '3', client_id: '2', value: 30 },
     ],

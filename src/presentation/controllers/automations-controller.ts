@@ -25,7 +25,8 @@ export class AutomationsController {
       let totalPages = 1;
 
       do {
-        const pageResult = await this.clientsRepository.findAll({
+        const pageResult = await this.clientsRepository.clientWithoutMonthInvoice({
+          month_id: month.id,
           page: currentPage,
           page_size: 100,
         });
