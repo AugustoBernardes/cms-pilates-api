@@ -2,27 +2,19 @@ name: Create Month Invoices
 
 on:
   schedule:
-    - cron: '0 0 1 * *'  # todo dia 1 às 00:00 UTC
+    - cron: '0 0 1 * *'
   workflow_dispatch:
 
 jobs:
   send_post:
     runs-on: ubuntu-latest
     steps:
-      - name: Send POST request
-        id: post
-        uses: fjogeleit/http-request-action@v1.15.1
-        with:
-          url: "${{ secrets.AUTOMATION_URL }}"
-          method: 'POST'
-          customHeaders: |
-            [
-              { "name": "Content-Type", "value": "application/json" },
-              { "name": "Authorization", "value": "Bearer ${{ secrets.AUTOMATION_TOKEN }}" }
-            ]
-
-      - name: Print response
+      - name: Send POST request with curl
+        env:
+          AUTOMATION_URL: ${{ secrets.AUTOMATION_URL }}
+          AUTOMATION_TOKEN: ${{ secrets.AUTOMATION_TOKEN }}
         run: |
-          echo "Response:"
-          echo '${{ steps.post.outputs.response }}' | jq .
-
+          response=$(curl -s -X POST "$AUTOMATION_URL" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $AUTOMATION_TOKEN")
+          echo "Response: $response"
