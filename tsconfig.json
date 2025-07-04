@@ -1,21 +1,20 @@
 {
-    "compilerOptions": {
-        "outDir": "./dist",
-        "module": "commonjs",
-        "target": "ES2019",
-        "esModuleInterop": true,
-        "allowJs": true,
-        "strictNullChecks": true,
-        "sourceMap": true,
-        "rootDir": "src",
-        "baseUrl": "src",
-        "paths": {
-            "@/*":["*"]
-        },
-    },
-    "include": [
-        "src"
-    ],
-    "exclude": [],
-    
+  "compilerOptions": {
+    "outDir": "./dist",
+    "module": "commonjs",
+    "target": "es2020",
+    "lib": ["es2020"],
+    "types": ["node"],
+    "esModuleInterop": true,
+    "allowJs": true,
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "rootDir": "src",
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }
