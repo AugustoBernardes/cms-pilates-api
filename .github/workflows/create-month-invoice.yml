@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Check secret access
-      run: echo "Token length: ${{ secrets.AUTOMATION_TOKEN && secrets.AUTOMATION_TOKEN.length }}"
+      run: echo "Token length ${{ secrets.AUTOMATION_TOKEN && secrets.AUTOMATION_TOKEN.length }}"
