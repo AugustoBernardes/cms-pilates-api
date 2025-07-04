@@ -1,0 +1,17 @@
+name: Create Month Invoices
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'
+  workflow_dispatch:
+
+jobs:
+  send_post:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send POST request
+        uses: fjogeleit/http-request-action@v1.15.1
+        with:
+          url: ${{ secrets.AUTOMATION_URL }}
+          method: 'POST'
+          headers: '{"Content-Type":"application/json", "Authorization":"Bearer ${{ secrets.AUTOMATION_TOKEN }}"}'
