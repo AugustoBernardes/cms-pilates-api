@@ -9,5 +9,12 @@ jobs:
   send_post:
     runs-on: ubuntu-latest
     steps:
-    - name: Check secret access
-      run: echo "Token length ${{ secrets.AUTOMATION_TOKEN && secrets.AUTOMATION_TOKEN.length }}"
+      - name: Check secret length
+        run: |
+          if [ -z "${{ secrets.AUTOMATION_TOKEN }}" ]; then
+            echo "Secret AUTOMATION_TOKEN is empty or not set"
+          else
+            echo "Token length: ${#AUTOMATION_TOKEN}"
+          fi
+        env:
+          AUTOMATION_TOKEN: ${{ secrets.AUTOMATION_TOKEN }}
