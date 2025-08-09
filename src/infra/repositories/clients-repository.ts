@@ -86,14 +86,14 @@ export class ClientsRepository implements IClientsRepository {
   }
 
   async findAnniversaryClients(): Promise<Client[] | null> {
-    const month = new Date().getMonth() + 1
-    
+    const nextMonth = new Date().getMonth() + 2;
+
     const users = await prisma.$queryRawUnsafe(`
       SELECT * FROM "clients"
       WHERE EXTRACT(MONTH FROM "birth_date") = $1
       AND "deleted_at" IS NULL
       ORDER BY "birth_date" ASC
-    `, month) as Client[];
+    `, nextMonth) as Client[];
 
     return users.length > 0 ? users : null;
   }
